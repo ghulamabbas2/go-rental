@@ -1,0 +1,7 @@
+/node_modules
+/shared/node_modules
+/shared/dist
+
+/server/node_modules
+/server/dist
+/server/dist/config/.env.local
