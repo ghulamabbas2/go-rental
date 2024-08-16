@@ -1,21 +1,27 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_CARS = gql`
-  query GetAllCars {
-    getAllCars {
-      category
-      fuelType
-      images {
-        public_id
-        url
+  query Cars($filters: CarFilters, $query: String, $page: Int) {
+    getAllCars(filters: $filters, query: $query, page: $page) {
+      cars {
+        category
+        fuelType
+        images {
+          public_id
+          url
+        }
+        id
+        name
+        rentPerDay
+        transmission
+        ratings {
+          count
+          value
+        }
       }
-      id
-      name
-      rentPerDay
-      transmission
-      ratings {
-        count
-        value
+      pagination {
+        resPerPage
+        totalCount
       }
     }
   }

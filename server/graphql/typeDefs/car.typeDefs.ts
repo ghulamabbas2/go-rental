@@ -51,8 +51,33 @@ export const carTypeDefs = gql`
     category: String!
   }
 
+  input RentFilter {
+    gt: Int
+    gte: Int
+    lt: Int
+    lte: Int
+  }
+
+  input CarFilters {
+    category: String
+    brand: String
+    transmission: String
+    status: String
+    rentPerDay: RentFilter
+  }
+
+  type Pagination {
+    totalCount: Int
+    resPerPage: Int
+  }
+
+  type PaginatedCars {
+    cars: [Car]
+    pagination: Pagination
+  }
+
   type Query {
-    getAllCars: [Car]
+    getAllCars(page: Int, filters: CarFilters, query: String): PaginatedCars
     getCarById(carId: ID!): Car
   }
 

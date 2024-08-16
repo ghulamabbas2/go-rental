@@ -5,11 +5,18 @@ import {
   getCarById,
   updateCar,
 } from "../../controllers/car.controller";
-import { CarInput } from "../../types/car.types";
+import { CarFilters, CarInput } from "../../types/car.types";
 
 export const carResolvers = {
   Query: {
-    getAllCars: async (parent: any) => await getAllCars(),
+    getAllCars: async (
+      _: any,
+      {
+        page = 1,
+        filters,
+        query,
+      }: { page: number; filters: CarFilters; query: string }
+    ) => await getAllCars(page, filters, query),
     getCarById: async (_: any, { carId }: { carId: string }) =>
       await getCarById(carId),
   },

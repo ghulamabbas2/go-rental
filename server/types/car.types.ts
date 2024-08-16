@@ -14,3 +14,16 @@ export type CarInput = {
   fuelType: string;
   category: string;
 };
+
+export type CarFilters = {
+  category: string;
+  brand: string;
+  transmission: string;
+  status: string;
+  rentPerDay: {
+    gt: number;
+    gte: number;
+    lt: number;
+    lte: number;
+  };
+};
