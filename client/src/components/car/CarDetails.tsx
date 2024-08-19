@@ -15,6 +15,7 @@ import StarRatings from "react-star-ratings";
 // import CarReviews from "../review/CarReviews";
 import CarFeatures from "./CarFeatures";
 import LoadingSpinner from "../layout/LoadingSpinner";
+import NotFound from "../layout/NotFound";
 
 const CarDetails = () => {
   const params = useParams();
@@ -31,6 +32,10 @@ const CarDetails = () => {
     return <LoadingSpinner size={60} fullScreen={true} />;
   }
 
+  if (error?.graphQLErrors[0]?.extensions?.code === "NOT_FOUND") {
+    return <NotFound />;
+  }
+
   return (
     <div className="container">
       <main className="my-8 grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-4">
@@ -41,21 +46,21 @@ const CarDetails = () => {
                 <CardTitle className="px-8 mb-5 text-xl">
                   <Badge variant="outline" className="flex py-2 text-sm">
                     <MapPin className="h-4 w-4 mr-2" />
-                    <p>{car.address}</p>
+                    <p>{car?.address}</p>
                   </Badge>
                 </CardTitle>
                 <div className="text-sm text-muted-foreground">
                   <CarImagesSlider images={car?.images} />
                   <div className="px-8 mt-5">
-                    <h1 className="text-3xl font-bold">{car.name}</h1>
+                    <h1 className="text-3xl font-bold">{car?.name}</h1>
 
                     <p className="font-bold text-lg pt-2">
-                      <span className="text-xl">${car.rentPerDay}</span> / Day
+                      <span className="text-xl">${car?.rentPerDay}</span> / Day
                     </p>
 
                     <div className="flex items-center my-5">
                       <StarRatings
-                        rating={car.ratings.value}
+                        rating={car?.ratings.value}
                         starRatedColor="orange"
                         numberOfStars={5}
                         name="rating"
@@ -63,16 +68,16 @@ const CarDetails = () => {
                         starSpacing="1px"
                       />
                       <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">
-                        {car.ratings.value}
+                        {car?.ratings.value}
                       </p>
                       <span className="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
                       <p className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
-                        {car.ratings.count} reviews
+                        {car?.ratings.count} reviews
                       </p>
                     </div>
 
                     <DropdownMenuSeparator />
-                    <p className="text-lg">{car.description}</p>
+                    <p className="text-lg">{car?.description}</p>
                     <DropdownMenuSeparator />
                   </div>
                 </div>

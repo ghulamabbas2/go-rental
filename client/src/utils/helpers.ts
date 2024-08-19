@@ -1,3 +1,5 @@
+import { toast } from "src/components/ui/use-toast";
+
 export const updateSearchParams = (
   searchParams: URLSearchParams,
   key: string,
@@ -10,4 +12,13 @@ export const updateSearchParams = (
   }
 
   return searchParams;
+};
+
+export const errorToast = (error: any) => {
+  const errMessage = error?.cause?.result?.errors[0]?.message || error?.message;
+  toast({
+    variant: "destructive",
+    title: "Something went wrong.",
+    description: errMessage || "An unexpected error occured.",
+  });
 };
