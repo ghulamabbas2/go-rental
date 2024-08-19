@@ -4,12 +4,13 @@ import { Checkbox } from "../ui/checkbox";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { updateSearchParams } from "src/utils/helpers";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { CarBrand, CarCategories, CarTransmissions } from "@go-rental/shared";
 
 const Filters = () => {
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
@@ -19,29 +20,50 @@ const Filters = () => {
   });
 
   useEffect(() => {
-    const updateSearchParams = new URLSearchParams(searchParams);
+    if (location.pathname === "/" && !location.search) {
+      setFilters({
+        category: null,
+        brand: null,
+        transmission: null,
+      });
+    }
+  }, [location]);
 
+  useEffect(() => {
+    if (searchQuery === "") {
+      searchParams.delete("query");
+    }
+
+    const path = `${window.location.pathname}?${searchParams.toString()}`;
+    navigate(path);
+  }, [navigate, searchParams, searchQuery]);
+
+  const updateURLParams = (filters: {
+    category: string | null;
+    brand: string | null;
+    transmission: string;
+  }) => {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
-        updateSearchParams.set(key, value);
+        searchParams = updateSearchParams(searchParams, key, value as string);
       } else {
-        updateSearchParams.delete(key);
+        searchParams.delete(key);
       }
     });
 
-    if (searchQuery === "") {
-      updateSearchParams.delete("query");
-    }
-
-    const path = `${window.location.pathname}?${updateSearchParams.toString()}`;
+    const path = `${window.location.pathname}?${searchParams.toString()}`;
     navigate(path);
-  }, [filters, navigate, searchParams, searchQuery]);
+  };
 
   const handleCheckboxChange = (type: string, value: string) => {
-    setFilters((prevFilters: any) => ({
-      ...prevFilters,
-      [type]: prevFilters[type] === value ? null : value,
-    }));
+    setFilters((prevFilters: any) => {
+      const updatedFilters = {
+        ...prevFilters,
+        [type]: prevFilters[type] === value ? null : value,
+      };
+      updateURLParams(updatedFilters);
+      return updatedFilters;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
