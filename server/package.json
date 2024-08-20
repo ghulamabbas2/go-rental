@@ -10,8 +10,11 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
@@ -19,10 +22,15 @@
     "@apollo/server": "^4.11.0",
     "@go-rental/shared": "file:../shared",
     "@graphql-tools/schema": "^10.0.5",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "graphql-middleware": "^6.1.35",
+    "graphql-shield": "^7.6.5",
     "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.2"
   }
 }
