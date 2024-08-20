@@ -22,3 +22,18 @@ export const errorToast = (error: any) => {
     description: errMessage || "An unexpected error occured.",
   });
 };
+
+export const errorWrapper = async (fn: Function) => {
+  try {
+    return await fn();
+  } catch (error: any) {
+    const errMessage =
+      error?.cause?.result?.errors[0]?.message || error?.message;
+
+    toast({
+      variant: "destructive",
+      title: "Something went wrong.",
+      description: errMessage || "An unexpected error occurred.",
+    });
+  }
+};
