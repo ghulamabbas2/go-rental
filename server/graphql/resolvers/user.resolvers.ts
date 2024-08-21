@@ -1,5 +1,11 @@
 import { Response } from "express";
-import { login, registerUser } from "../../controllers/user.controller";
+import {
+  login,
+  registerUser,
+  updatePassword,
+  updateUserProfile,
+  uploadUserAvatar,
+} from "../../controllers/user.controller";
 import { UserInput } from "../../types/user.types";
 import { IUser } from "@go-rental/shared";
 
@@ -25,5 +31,23 @@ export const userResolvers = {
     ) => {
       return login(email, password, res);
     },
+    updateUserProfile: async (
+      _: any,
+      { userInput }: { userInput: Partial<UserInput> },
+      { user }: { user: IUser }
+    ) => updateUserProfile(userInput, user.id),
+    updatePassword: async (
+      _: any,
+      {
+        oldPassword,
+        newPassword,
+      }: { oldPassword: string; newPassword: string },
+      { user }: { user: IUser }
+    ) => updatePassword(oldPassword, newPassword, user.id),
+    uploadUserAvatar: async (
+      _: any,
+      { avatar }: { avatar: string },
+      { user }: { user: IUser }
+    ) => uploadUserAvatar(avatar, user.id),
   },
 };

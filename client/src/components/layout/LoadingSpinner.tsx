@@ -8,7 +8,11 @@ type Props = {
   fullScreen?: boolean;
 };
 
-const LoadingSpinner = ({ size = 5, className, fullScreen = false }: Props) => {
+const LoadingSpinner = ({
+  size = 20,
+  className,
+  fullScreen = false,
+}: Props) => {
   const spinner = (
     <LoaderCircle className={cn("animate-spin", className)} size={size} />
   );

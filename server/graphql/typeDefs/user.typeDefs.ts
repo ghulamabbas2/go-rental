@@ -24,6 +24,12 @@ export const userTypeDefs = gql`
     phoneNo: String!
   }
 
+  input UpdateUserInput {
+    name: String!
+    email: String!
+    phoneNo: String!
+  }
+
   type Query {
     me: User
     logout: Boolean
@@ -32,5 +38,8 @@ export const userTypeDefs = gql`
   type Mutation {
     registerUser(userInput: UserInput!): User
     login(email: String!, password: String!): User
+    updateUserProfile(userInput: UpdateUserInput!): Boolean
+    updatePassword(oldPassword: String!, newPassword: String!): Boolean
+    uploadUserAvatar(avatar: String!): Boolean
   }
 `;

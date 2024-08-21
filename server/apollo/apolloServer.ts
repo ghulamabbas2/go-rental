@@ -59,7 +59,6 @@ export async function startApolloServer(app: Application) {
             throw new Error("Invalid or expired token");
           }
         }
-
         return { req, res, user };
       },
     })
