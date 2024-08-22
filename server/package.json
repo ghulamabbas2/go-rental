@@ -32,6 +32,7 @@
     "graphql-shield": "^7.6.5",
     "graphql-tag": "^2.12.6",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.5.2"
+    "mongoose": "^8.5.2",
+    "nodemailer": "^6.9.14"
   }
 }

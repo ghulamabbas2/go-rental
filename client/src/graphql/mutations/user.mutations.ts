@@ -33,3 +33,23 @@ export const UPLOAD_AVATAR_MUTATION = gql`
     uploadUserAvatar(avatar: $avatar)
   }
 `;
+
+export const FORGOT_PASSWORD_MUTATION = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+export const RESET_PASSWORD_MUTATION = gql`
+  mutation ResetPassword(
+    $token: String!
+    $password: String!
+    $confirmPassword: String!
+  ) {
+    resetPassword(
+      token: $token
+      password: $password
+      confirmPassword: $confirmPassword
+    )
+  }
+`;

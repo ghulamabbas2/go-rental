@@ -31,6 +31,7 @@ export interface IUser {
   resetPasswordExpire: Date | undefined;
   createdAt: string;
   updatedAt: string;
+  getResetPasswordToken(): string;
 }
 
 export interface ICar {

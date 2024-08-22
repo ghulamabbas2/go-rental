@@ -1,7 +1,9 @@
 import { Response } from "express";
 import {
+  forgotPassword,
   login,
   registerUser,
+  resetPassword,
   updatePassword,
   updateUserProfile,
   uploadUserAvatar,
@@ -49,5 +51,15 @@ export const userResolvers = {
       { avatar }: { avatar: string },
       { user }: { user: IUser }
     ) => uploadUserAvatar(avatar, user.id),
+    forgotPassword: async (_: any, { email }: { email: string }) =>
+      forgotPassword(email),
+    resetPassword: async (
+      _: any,
+      {
+        token,
+        password,
+        confirmPassword,
+      }: { token: string; password: string; confirmPassword: string }
+    ) => resetPassword(token, password, confirmPassword),
   },
 };
