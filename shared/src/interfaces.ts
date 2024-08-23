@@ -14,6 +14,9 @@ export const CarTransmissions = ["Automatic", "Manual"];
 export const CarDoors = [2, 4];
 export const CarSeats = [2, 4, 5, 7, 8, 9, 10];
 
+export const BookingPaymentMethods = ["card", "cash"];
+export const BookingPaymentStatus = ["paid", "pending"];
+
 export const UserRoles = ["user", "admin"];
 
 export interface IUser {
@@ -59,6 +62,35 @@ export interface ICar {
     value: number;
     count: number;
   };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IBooking {
+  id: string;
+  user: IUser;
+  car: ICar;
+  startDate: Date;
+  endDate: Date;
+  customer: {
+    name: string;
+    email: string;
+    phoneNo: string;
+  };
+  amount: {
+    rent: number;
+    discount: number;
+    tax: number;
+    total: number;
+  };
+  daysOfRent: number;
+  rentPerDay: number;
+  paymentInfo: {
+    id: string;
+    status: string;
+    method: string;
+  };
+  additionalNotes: string;
   createdAt: string;
   updatedAt: string;
 }

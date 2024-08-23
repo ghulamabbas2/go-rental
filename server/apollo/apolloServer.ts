@@ -12,14 +12,16 @@ import { permissions } from "../middlewares/permissions";
 import { applyMiddleware } from "graphql-middleware";
 import { userResolvers } from "../graphql/resolvers/user.resolvers";
 import { userTypeDefs } from "../graphql/typeDefs/user.typeDefs";
+import { bookingTypeDefs } from "../graphql/typeDefs/booking.typeDefs";
+import { bookingResolvers } from "../graphql/resolvers/booking.resolvers";
 
 interface CustomJwtPayload {
   _id: string;
 }
 
 export async function startApolloServer(app: Application) {
-  const typeDefs = [carTypeDefs, userTypeDefs];
-  const resolvers = [carResolvers, userResolvers];
+  const typeDefs = [carTypeDefs, userTypeDefs, bookingTypeDefs];
+  const resolvers = [carResolvers, userResolvers, bookingResolvers];
 
   const schema = makeExecutableSchema({
     typeDefs,

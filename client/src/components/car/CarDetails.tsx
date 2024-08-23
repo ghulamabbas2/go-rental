@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 
 // import { CustomBreadcrumb } from "../layout/BreadCrumbs";
-// import { BookingForm } from "../booking/BookingForm";
+import { BookingForm } from "../booking/BookingForm";
 // import CarReviews from "../review/CarReviews";
 import CarFeatures from "./CarFeatures";
 import LoadingSpinner from "../layout/LoadingSpinner";
@@ -23,10 +23,12 @@ const CarDetails = () => {
   const { data, loading, error } = useQuery(GET_CAR_BY_ID, {
     variables: {
       carId: params?.id,
+      getCarBookedDatesCarId2: params?.id,
     },
   });
 
   const car = data?.getCarById;
+  const disabledDates = data?.getCarBookedDates;
 
   if (loading) {
     return <LoadingSpinner size={60} fullScreen={true} />;
@@ -90,7 +92,13 @@ const CarDetails = () => {
 
           {/* <CarReviews /> */}
         </div>
-        <div>{/* <BookingForm /> */}</div>
+        <div>
+          <BookingForm
+            carId={car?.id}
+            rentPerDay={car?.rentPerDay}
+            disabledDates={disabledDates}
+          />
+        </div>
       </main>
     </div>
   );
