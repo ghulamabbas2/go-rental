@@ -14,14 +14,27 @@ import { userResolvers } from "../graphql/resolvers/user.resolvers";
 import { userTypeDefs } from "../graphql/typeDefs/user.typeDefs";
 import { bookingTypeDefs } from "../graphql/typeDefs/booking.typeDefs";
 import { bookingResolvers } from "../graphql/resolvers/booking.resolvers";
+import { paymentTypeDefs } from "../graphql/typeDefs/payment.typeDefs";
+import { paymentResolvers } from "../graphql/resolvers/payment.resolvers";
+import { webhookHandler } from "../controllers/payment.controller";
 
 interface CustomJwtPayload {
   _id: string;
 }
 
 export async function startApolloServer(app: Application) {
-  const typeDefs = [carTypeDefs, userTypeDefs, bookingTypeDefs];
-  const resolvers = [carResolvers, userResolvers, bookingResolvers];
+  const typeDefs = [
+    carTypeDefs,
+    userTypeDefs,
+    bookingTypeDefs,
+    paymentTypeDefs,
+  ];
+  const resolvers = [
+    carResolvers,
+    userResolvers,
+    bookingResolvers,
+    paymentResolvers,
+  ];
 
   const schema = makeExecutableSchema({
     typeDefs,
@@ -65,4 +78,17 @@ export async function startApolloServer(app: Application) {
       },
     })
   );
+
+  app.post("/api/payment/webhook", async (req: Request, res: Response) => {
+    const signature = req.headers["stripe-signature"];
+    const rawBody = req.rawBody;
+
+    const success = await webhookHandler(signature, rawBody);
+
+    if (success) {
+      res.status(200).json({ success: true });
+    } else {
+      res.status(400).json({ success: false });
+    }
+  });
 }

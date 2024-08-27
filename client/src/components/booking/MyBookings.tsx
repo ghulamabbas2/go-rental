@@ -212,7 +212,7 @@ const MyBookings = () => {
                         </TableCell>
                         <TableCell>
                           {booking?.paymentInfo?.status === "pending" && (
-                            <Link to="/booking/12345/payment_method">
+                            <Link to={`/booking/${booking?.id}/payment_method`}>
                               <Button>
                                 <CreditCard className="mr-2 h-4 w-4" /> Pay
                               </Button>
@@ -220,7 +220,7 @@ const MyBookings = () => {
                           )}
 
                           {booking?.paymentInfo?.status === "paid" && (
-                            <Link to="/invoice">
+                            <Link to={`/booking/invoice/${booking?.id}`}>
                               <Button className="ml-2">
                                 <ReceiptText className="mr-2 h-4 w-4" /> Invoice
                               </Button>

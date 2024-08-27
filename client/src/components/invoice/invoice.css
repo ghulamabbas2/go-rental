@@ -1,0 +1,192 @@
+.invoice .clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.invoice a {
+  color: #0087c3;
+  text-decoration: none;
+}
+
+.invoice body {
+  position: relative;
+  width: 21cm;
+  height: 29.7cm;
+  margin: 0 auto;
+  color: #555555;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-family: SourceSansPro;
+}
+
+.invoice header {
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #aaaaaa;
+}
+
+#logo {
+  float: left;
+  margin-top: 8px;
+}
+
+#logo img {
+  height: 70px;
+}
+
+#company {
+  float: right;
+  text-align: right;
+}
+
+#details {
+  margin-bottom: 50px;
+}
+
+#client {
+  padding-left: 6px;
+  border-left: 6px solid #0087c3;
+  float: left;
+}
+
+#client .to {
+  color: #777777;
+}
+
+.invoice h2.name {
+  font-size: 1.4em;
+  font-weight: normal;
+  margin: 0;
+}
+
+#invoice {
+  float: right;
+  text-align: right;
+}
+
+#invoice h1 {
+  color: #0087c3;
+  font-size: 2.4em;
+  line-height: 1em;
+  font-weight: normal;
+  margin: 0 0 10px 0;
+}
+
+#invoice .date {
+  font-size: 1.1em;
+  color: #777777;
+}
+
+.invoice table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+
+.invoice table th,
+.invoice table td {
+  padding: 20px;
+  background: #eeeeee;
+  text-align: center;
+  border-bottom: 1px solid #ffffff;
+}
+
+.invoice table th {
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+.invoice table td {
+  text-align: right;
+}
+
+.invoice table td h3 {
+  color: #57b223;
+  font-size: 1.2em;
+  font-weight: normal;
+  margin: 0 0 0.2em 0;
+}
+
+.invoice table .no {
+  color: #ffffff;
+  font-size: 1.6em;
+  background: #57b223;
+}
+
+.invoice table .desc {
+  text-align: left;
+}
+
+.invoice table .unit {
+  background: #dddddd;
+}
+
+.invoice table .qty {
+}
+
+.invoice table .total {
+  background: #57b223;
+  color: #ffffff;
+}
+
+.invoice table td.unit,
+.invoice table td.qty,
+.invoice table td.total {
+  font-size: 1.2em;
+}
+
+.invoice table tbody tr:last-child td {
+  border: none;
+}
+
+.invoice table tfoot td {
+  padding: 10px 20px;
+  background: #ffffff;
+  border-bottom: none;
+  font-size: 1.2em;
+  white-space: nowrap;
+  border-top: 1px solid #aaaaaa;
+}
+
+.invoice table tfoot tr:first-child td {
+  border-top: none;
+}
+
+.invoice table tfoot tr:last-child td {
+  color: #57b223;
+  font-size: 1.4em;
+  border-top: 1px solid #57b223;
+}
+
+.invoice table tfoot tr td:first-child {
+  border: none;
+}
+
+#thanks {
+  font-size: 2em;
+  margin-bottom: 50px;
+}
+
+#notices {
+  padding-left: 6px;
+  border-left: 6px solid #0087c3;
+}
+
+#notices .notice {
+  font-size: 1.2em;
+}
+
+.invoice {
+  width: 1000px; /* Set a fixed width */
+  margin: 0 auto; /* Center the invoice */
+}
+
+@media print {
+  .invoice {
+    width: 1000px; /* Ensure the body width matches the invoice width */
+    margin: 0 auto; /* Center the body content */
+  }
+}

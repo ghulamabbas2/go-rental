@@ -21,6 +21,7 @@ import NotFound from "../layout/NotFound";
 import { errorToast, errorWrapper } from "src/utils/helpers";
 import { UPDATE_BOOKING_MUTATION } from "src/graphql/mutations/booking.mutations";
 import { toast } from "../ui/use-toast";
+import { STRIPE_CHECKOUT_SESSION_MUTATION } from "src/graphql/mutations/payment.mutations";
 
 const PaymentMethod = () => {
   const [paymentMethod, setPaymentMethod] = React.useState("cash");
@@ -45,9 +46,21 @@ const PaymentMethod = () => {
     },
   });
 
+  const [
+    stripeCheckoutSession,
+    { loading: checkoutLoading, error: checkoutError },
+  ] = useMutation(STRIPE_CHECKOUT_SESSION_MUTATION, {
+    onCompleted: (data) => {
+      if (data?.stripeCheckoutSession?.url) {
+        window.location.href = data?.stripeCheckoutSession?.url;
+      }
+    },
+  });
+
   useEffect(() => {
     if (bookingError) errorToast(bookingError);
-  }, [bookingError]);
+    if (checkoutError) errorToast(checkoutError);
+  }, [bookingError, checkoutError]);
 
   const handleBookingUpdate = async () => {
     if (paymentMethod === "cash") {
@@ -65,6 +78,11 @@ const PaymentMethod = () => {
     }
 
     if (paymentMethod === "card") {
+      await errorWrapper(async () => {
+        await stripeCheckoutSession({
+          variables: { bookingId: params?.id },
+        });
+      });
     }
   };
 
@@ -183,7 +201,11 @@ const PaymentMethod = () => {
             )}
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleBookingUpdate}>
+            <Button
+              className="w-full"
+              onClick={handleBookingUpdate}
+              disabled={checkoutLoading}
+            >
               <CreditCard className="mr-2 h-4 w-4" />{" "}
               {paymentMethod === "card" ? "Pay with Card" : "Confirm"}
             </Button>

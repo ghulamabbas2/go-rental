@@ -88,5 +88,15 @@ const bookingSchema = new mongoose.Schema<IBooking>(
   { timestamps: true }
 );
 
+bookingSchema.index(
+  {
+    createdAt: 1,
+  },
+  {
+    expireAfterSeconds: 2 * 24 * 60 * 60,
+    partialFilterExpression: { "paymentInfo.status": "pending" },
+  }
+);
+
 const Booking = mongoose.model<IBooking>("Booking", bookingSchema);
 export default Booking;

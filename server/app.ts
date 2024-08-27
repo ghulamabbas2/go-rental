@@ -7,7 +7,14 @@ dotenv.config({ path: "config/.env.local" });
 
 const app = express();
 
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "10mb",
+    verify: (req: express.Request, res: express.Response, buf: Buffer) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
 app.use(cookieParser());
 
 dbConnect();
