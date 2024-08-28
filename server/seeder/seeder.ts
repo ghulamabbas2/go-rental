@@ -9,7 +9,10 @@ const seedCars = async () => {
     await Car.deleteMany();
     console.log("Cars deleted");
 
-    await Car.insertMany(cars);
+    for (const carData of cars) {
+      const car = new Car(carData);
+      await car.save();
+    }
     console.log("Cars added");
 
     process.exit();

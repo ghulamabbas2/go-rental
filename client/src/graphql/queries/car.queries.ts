@@ -6,6 +6,9 @@ export const GET_ALL_CARS = gql`
       cars {
         category
         fuelType
+        location {
+          coordinates
+        }
         images {
           public_id
           url

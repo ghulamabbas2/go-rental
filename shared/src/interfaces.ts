@@ -44,6 +44,18 @@ export interface ICar {
   status: string;
   rentPerDay: number;
   address: string;
+  location: {
+    type: "Point";
+    coordinates: number[];
+    formattedAddress: string;
+    streetName?: string;
+    city?: string;
+    state?: string;
+    stateCode?: string;
+    zipcode?: string;
+    country?: string;
+    countryCode?: string;
+  };
   images: {
     url: string;
     public_id: string;

@@ -11,6 +11,10 @@ export const carTypeDefs = gql`
     count: Int
   }
 
+  type Location {
+    coordinates: [Float]
+  }
+
   type Car {
     id: ID!
     name: String!
@@ -18,6 +22,7 @@ export const carTypeDefs = gql`
     status: String!
     rentPerDay: Float!
     address: String!
+    location: Location
     year: Int!
     power: Int!
     milleage: Int!

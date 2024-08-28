@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { toast } from "./ui/use-toast";
 import { errorToast } from "src/utils/helpers";
 import AlertMessage from "./layout/AlertMessage";
+import LocationSearch from "./map/LocationSearch";
+import HomeMap from "./map/HomeMap";
 
 const Home = () => {
   let [searchParams] = useSearchParams();
@@ -50,7 +52,11 @@ const Home = () => {
         />
       </div>
       <div className="md:col-span-6 lg:col-span-4 flex flex-col">
-        <div className="flex items-center justify-center h-screen"></div>
+        <div className="flex items-center justify-center h-screen">
+          {" "}
+          <HomeMap cars={data?.getAllCars?.cars} />
+        </div>
+
         {/* Google Map Component */}
       </div>
     </main>

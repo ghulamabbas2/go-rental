@@ -111,3 +111,15 @@ export const calculateTablePaginationEnd = (
   const end = Math.min(currentPage * resPerPage, totalCount);
   return end;
 };
+
+export const generateSvg = (
+  price: string
+) => `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 80 60" fill="none">
+  <rect width="80" height="50" rx="10" fill="#1c1b1b"/>
+  <path d="M40 60L30 50H50L40 60Z" fill="#1c1b1b"/>
+  <text x="50%" y="35"
+        text-anchor="middle" fill="#FFF"
+        font-size="30px" font-family="sans-serif" font-weight="bold">
+        $${price}
+  </text>
+</svg>`;

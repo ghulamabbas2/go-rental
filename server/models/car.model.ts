@@ -9,6 +9,7 @@ import {
   CarCategories,
   ICar,
 } from "@go-rental/shared";
+import geocoder from "../utils/geoCoder";
 
 const carSchema = new mongoose.Schema<ICar>(
   {
@@ -35,6 +36,24 @@ const carSchema = new mongoose.Schema<ICar>(
     address: {
       type: String,
       required: [true, "Please enter address"],
+    },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      coordinates: {
+        type: [Number],
+        index: "2dsphere",
+      },
+      formattedAddress: String,
+      streetName: String,
+      city: String,
+      state: String,
+      stateCode: String,
+      zipcode: String,
+      country: String,
+      countryCode: String,
     },
     images: [
       {
@@ -114,6 +133,27 @@ carSchema.virtual("ratings").get(function () {
     value: 5,
     count: 10,
   };
+});
+
+carSchema.pre("save", async function (next) {
+  if (!this.isModified("address")) return next();
+
+  const loc = await geocoder.geocode(this.address);
+
+  this.location = {
+    type: "Point",
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    streetName: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].administrativeLevels.level1long,
+    stateCode: loc[0].administrativeLevels.level1short,
+    zipcode: loc[0].zipcode,
+    country: loc[0].country,
+    countryCode: loc[0].countryCode,
+  };
+
+  next();
 });
 
 const Car = mongoose.model<ICar>("Car", carSchema);
