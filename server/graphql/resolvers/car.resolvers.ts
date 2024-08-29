@@ -5,7 +5,7 @@ import {
   getCarById,
   updateCar,
 } from "../../controllers/car.controller";
-import { CarFilters, CarInput } from "../../types/car.types";
+import { CarFilters, CarInput, DateFilters } from "../../types/car.types";
 
 export const carResolvers = {
   Query: {
@@ -15,22 +15,29 @@ export const carResolvers = {
         page = 1,
         filters,
         query,
-      }: { page: number; filters: CarFilters; query: string }
-    ) => await getAllCars(page, filters, query),
+        location,
+        dateFilters,
+      }: {
+        page: number;
+        filters: CarFilters;
+        query: string;
+        location: string;
+        dateFilters: DateFilters;
+      }
+    ) => getAllCars(page, filters, query, location, dateFilters),
     getCarById: async (_: any, { carId }: { carId: string }) =>
-      await getCarById(carId),
+      getCarById(carId),
   },
   Mutation: {
     createCar: async (_: any, { carInput }: { carInput: CarInput }) => {
-      return await createCar(carInput);
+      return createCar(carInput);
     },
     updateCar: async (
       _: any,
       { carId, carInput }: { carId: string; carInput: CarInput }
     ) => {
-      return await updateCar(carId, carInput);
+      return updateCar(carId, carInput);
     },
-    deleteCar: async (_: any, { carId }: { carId: string }) =>
-      await deleteCar(carId),
+    deleteCar: async (_: any, { carId }: { carId: string }) => deleteCar(carId),
   },
 };

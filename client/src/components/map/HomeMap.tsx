@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Card } from "../ui/card";
 import { generateSvg } from "src/utils/helpers";
+import loadGoogleMapsApi from "src/utils/googleMapLoader";
 
 interface ICoordinates {
   id: string;
@@ -36,12 +37,7 @@ const HomeMap = ({ cars }: Props) => {
   }));
 
   const loadMap = () => {
-    const loader = new Loader({
-      apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-      libraries: ["maps"],
-    });
-
-    loader.load().then(async () => {
+    loadGoogleMapsApi().then(async () => {
       const { Map } = (await google.maps.importLibrary(
         "maps"
       )) as google.maps.MapsLibrary;
@@ -115,7 +111,7 @@ const HomeMap = ({ cars }: Props) => {
       });
     }
 
-    renderMarkers();
+    if (map && coordinates?.length > 0) renderMarkers();
   }, [map, coordinates]);
 
   return (

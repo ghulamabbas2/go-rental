@@ -5,6 +5,6 @@ export const paymentResolvers = {
     stripeCheckoutSession: async (
       _: any,
       { bookingId }: { bookingId: string }
-    ) => await stripeCheckoutSession(bookingId),
+    ) => stripeCheckoutSession(bookingId),
   },
 };

@@ -1,3 +1,4 @@
+import { queryAllByAltText } from "@testing-library/react";
 import { format } from "date-fns";
 import { toast } from "src/components/ui/use-toast";
 
@@ -123,3 +124,18 @@ export const generateSvg = (
         $${price}
   </text>
 </svg>`;
+
+export const isValidQueryValue = (value: string) => {
+  return value !== undefined && value !== null && value !== "";
+};
+
+export const formatQueryParam = (key: string, value: string) => {
+  return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+};
+
+export const buildQueryString = (queries: object) => {
+  return Object.entries(queries)
+    .filter(([_, value]) => isValidQueryValue(value))
+    .map(([key, value]) => formatQueryParam(key, value))
+    .join("&");
+};

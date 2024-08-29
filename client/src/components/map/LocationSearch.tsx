@@ -1,5 +1,4 @@
-import { useJsApiLoader } from "@react-google-maps/api";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { MapPin, MapPinned } from "lucide-react";
@@ -12,8 +11,13 @@ import {
   CommandList,
 } from "../ui/command";
 import usePlacesAutocomplete from "use-places-autocomplete";
+import loadGoogleMapsApi from "src/utils/googleMapLoader";
 
-const PlacesAutocomplete = () => {
+type Props = {
+  onLocationChanged: (location: string) => void;
+};
+
+const PlacesAutocomplete = ({ onLocationChanged }: Props) => {
   const [open, setOpen] = useState(false);
   const [locationValue, setLocationValue] = useState("");
 
@@ -58,6 +62,7 @@ const PlacesAutocomplete = () => {
                       value={description}
                       onSelect={(currenValue) => {
                         setLocationValue(currenValue);
+                        onLocationChanged(currenValue);
                         setOpen(false);
                       }}
                     >
@@ -78,13 +83,24 @@ const PlacesAutocomplete = () => {
   );
 };
 
-const LocationSearch = () => {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-    libraries: ["places"],
-  });
+const LocationSearch = ({ onLocationChanged }: Props) => {
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  return <div>{isLoaded ? <PlacesAutocomplete /> : <div>Loading...</div>}</div>;
+  useEffect(() => {
+    loadGoogleMapsApi().then(() => {
+      setIsLoaded(true);
+    });
+  }, []);
+
+  return (
+    <div>
+      {isLoaded ? (
+        <PlacesAutocomplete onLocationChanged={onLocationChanged} />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </div>
+  );
 };
 
 export default LocationSearch;

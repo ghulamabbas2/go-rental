@@ -27,3 +27,8 @@ export type CarFilters = {
     lte: number;
   };
 };
+
+export type DateFilters = {
+  startDate: Date;
+  endDate: Date;
+};

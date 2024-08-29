@@ -4,11 +4,11 @@ import ListHomeCars from "./car/ListHomeCars";
 import { GET_ALL_CARS } from "src/graphql/queries/car.queries";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import { toast } from "./ui/use-toast";
+
 import { errorToast } from "src/utils/helpers";
-import AlertMessage from "./layout/AlertMessage";
-import LocationSearch from "./map/LocationSearch";
+
 import HomeMap from "./map/HomeMap";
+import LoadingSpinner from "./layout/LoadingSpinner";
 
 const Home = () => {
   let [searchParams] = useSearchParams();
@@ -20,8 +20,14 @@ const Home = () => {
   const brand = searchParams.get("brand");
   const transmission = searchParams.get("transmission");
 
+  const location = searchParams.get("location");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
+  const budget = searchParams.get("budget");
+
   const filters = {
     status: "Active",
+    ...(budget && { rentPerDay: { lte: parseInt(budget, 10) } }),
     ...(category && { category }),
     ...(brand && { brand }),
     ...(transmission && { transmission }),
@@ -31,6 +37,8 @@ const Home = () => {
     page,
     filters,
     query,
+    location,
+    dateFilters: { startDate, endDate },
   };
 
   const { data, loading, error } = useQuery(GET_ALL_CARS, { variables });
@@ -53,8 +61,13 @@ const Home = () => {
       </div>
       <div className="md:col-span-6 lg:col-span-4 flex flex-col">
         <div className="flex items-center justify-center h-screen">
-          {" "}
-          <HomeMap cars={data?.getAllCars?.cars} />
+          {loading ? (
+            <div className="flex items center justify-center h-screen">
+              <LoadingSpinner fullScreen={true} size={60} />
+            </div>
+          ) : (
+            location && <HomeMap cars={data?.getAllCars?.cars} />
+          )}
         </div>
 
         {/* Google Map Component */}

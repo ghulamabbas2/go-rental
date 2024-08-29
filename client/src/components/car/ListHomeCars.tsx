@@ -1,6 +1,6 @@
 import { CardHeader, CardTitle } from "../ui/card";
 import CardItem from "./CardItem";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeftRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { ICar } from "@go-rental/shared";
@@ -17,6 +17,9 @@ type Props = {
 };
 
 const ListHomeCars = ({ cars, loading, pagination }: Props) => {
+  let [searchParams] = useSearchParams();
+  const location = searchParams.get("location");
+
   if (loading) {
     return <LoadingSpinner size={60} fullScreen={true} />;
   }
@@ -25,7 +28,9 @@ const ListHomeCars = ({ cars, loading, pagination }: Props) => {
     <>
       <CardHeader className="p-0">
         <CardTitle className="group flex items-center text-2xl p-0">
-          Rent Car for Your Next Trip
+          {location
+            ? `${cars?.length} Cars in: ${location}`
+            : "Rent Car for Your Next Trip"}
         </CardTitle>
         <div className="flex">
           <Link to="/search" className="inline-block">

@@ -81,8 +81,19 @@ export const carTypeDefs = gql`
     pagination: Pagination
   }
 
+  input DateFilters {
+    startDate: String
+    endDate: String
+  }
+
   type Query {
-    getAllCars(page: Int, filters: CarFilters, query: String): PaginatedCars
+    getAllCars(
+      page: Int
+      filters: CarFilters
+      query: String
+      location: String
+      dateFilters: DateFilters
+    ): PaginatedCars
     getCarById(carId: ID!): Car
   }
 
