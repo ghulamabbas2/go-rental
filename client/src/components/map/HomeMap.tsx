@@ -1,6 +1,5 @@
 import { ICar } from "@go-rental/shared";
 import React, { useEffect, useRef, useState } from "react";
-import { Loader } from "@googlemaps/js-api-loader";
 import { Card } from "../ui/card";
 import { generateSvg } from "src/utils/helpers";
 import loadGoogleMapsApi from "src/utils/googleMapLoader";

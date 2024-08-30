@@ -43,7 +43,11 @@ export const GET_ALL_CARS = gql`
 `;
 
 export const GET_CAR_BY_ID = gql`
-  query GetCarById($carId: ID!, $getCarBookedDatesCarId2: String!) {
+  query GetCarById(
+    $carId: ID!
+    $getCarBookedDatesCarId2: String!
+    $canReviewCarId: ID!
+  ) {
     getCarById(carId: $carId) {
       id
       name
@@ -63,6 +67,20 @@ export const GET_CAR_BY_ID = gql`
         url
         public_id
       }
+      reviews {
+        id
+        user {
+          id
+          name
+          avatar {
+            public_id
+            url
+          }
+        }
+        rating
+        comment
+        updatedAt
+      }
       category
       ratings {
         value
@@ -72,5 +90,6 @@ export const GET_CAR_BY_ID = gql`
       updatedAt
     }
     getCarBookedDates(carId: $getCarBookedDatesCarId2)
+    canReview(canReviewCarId: $canReviewCarId)
   }
 `;

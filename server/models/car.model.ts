@@ -121,7 +121,7 @@ const carSchema = new mongoose.Schema<ICar>(
         message: "Please select correct category for car",
       },
     },
-    reviews: [String],
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   },
   {
     timestamps: true,
@@ -129,10 +129,22 @@ const carSchema = new mongoose.Schema<ICar>(
 );
 
 carSchema.virtual("ratings").get(function () {
-  return {
-    value: 5,
-    count: 10,
-  };
+  let numOfReviews = this.reviews.length;
+
+  if (numOfReviews === 0) {
+    return {
+      value: 5,
+      count: 1,
+    };
+  }
+
+  const ratingsSum = this.reviews.reduce(
+    (sum: number, review: any) => sum + review.rating,
+    0
+  );
+
+  const value = numOfReviews > 0 ? ratingsSum / numOfReviews : 0;
+  return { value, count: numOfReviews };
 });
 
 carSchema.pre("save", async function (next) {

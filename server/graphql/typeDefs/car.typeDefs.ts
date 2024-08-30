@@ -32,6 +32,7 @@ export const carTypeDefs = gql`
     seats: Int!
     doors: Int!
     images: [CarImages]
+    reviews: [Review]
     category: String!
     ratings: CarRatings
     createdAt: String
@@ -45,6 +46,7 @@ export const carTypeDefs = gql`
     rentPerDay: Float!
     address: String!
     images: [String]
+
     brand: String!
     year: Int!
     transmission: String!

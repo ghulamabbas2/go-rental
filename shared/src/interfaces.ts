@@ -106,3 +106,13 @@ export interface IBooking {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IReview {
+  id: string;
+  user: IUser;
+  car: ICar;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+}

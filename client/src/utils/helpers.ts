@@ -1,3 +1,4 @@
+import { IReview } from "@go-rental/shared";
 import { queryAllByAltText } from "@testing-library/react";
 import { format } from "date-fns";
 import { toast } from "src/components/ui/use-toast";
@@ -138,4 +139,8 @@ export const buildQueryString = (queries: object) => {
     .filter(([_, value]) => isValidQueryValue(value))
     .map(([key, value]) => formatQueryParam(key, value))
     .join("&");
+};
+
+export const findReviewByUserId = (reviews: IReview[], userId: string) => {
+  return reviews.find((review) => review.user.id === userId);
 };
