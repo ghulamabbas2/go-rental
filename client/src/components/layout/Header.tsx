@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Sheet,
   SheetTrigger,
@@ -22,15 +22,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 import { getUserNameInitials } from "src/utils/helpers";
 import UserMobileMenu from "../mobile-menu/UserMobileMenu";
-// import AdminMobileMenu from "../mobile-menu/AdminMobileMenu";
 import {
   isAuthenticatedVar,
   userVar,
   isLoadingVar,
 } from "src/apollo/apollo-vars";
+import AdminMobileMenu from "../mobile-menu/AdminMobileMenu";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { loading, data } = useQuery(CURRENT_USER, {
     onCompleted: (data) => {
@@ -149,12 +150,15 @@ const Header = () => {
                 </>
               )}
             </div>
-            {/* <AdminMobileMenu /> */}
             {currentUser && (
               <>
-                <UserMobileMenu
-                  isAdmin={currentUser?.role?.includes("admin")}
-                />
+                {location?.pathname?.includes("/admin") ? (
+                  <AdminMobileMenu />
+                ) : (
+                  <UserMobileMenu
+                    isAdmin={currentUser?.role?.includes("admin")}
+                  />
+                )}
                 <DropdownMenuSeparator />
                 <Link
                   to="#"

@@ -18,7 +18,7 @@ export const reviewTypeDefs = gql`
   }
 
   type Query {
-    canReview(canReviewCarId: ID!): Boolean
+    canReview(canReviewCarId: ID): Boolean
   }
 
   type Mutation {

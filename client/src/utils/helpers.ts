@@ -144,3 +144,7 @@ export const buildQueryString = (queries: object) => {
 export const findReviewByUserId = (reviews: IReview[], userId: string) => {
   return reviews.find((review) => review.user.id === userId);
 };
+
+export const formatAmountWithCommas = (amount: number) => {
+  return new Intl.NumberFormat("en-US").format(amount);
+};

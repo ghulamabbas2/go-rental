@@ -1,6 +1,7 @@
 import {
   createCar,
   deleteCar,
+  deleteCarImage,
   getAllCars,
   getCarById,
   updateCar,
@@ -38,6 +39,10 @@ export const carResolvers = {
     ) => {
       return updateCar(carId, carInput);
     },
+    deleteCarImage: async (
+      _: any,
+      { carId, imageId }: { carId: string; imageId: string }
+    ) => deleteCarImage(carId, imageId),
     deleteCar: async (_: any, { carId }: { carId: string }) => deleteCar(carId),
   },
 };

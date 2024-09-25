@@ -112,3 +112,134 @@ export const myBookings = catchAsyncErrors(
     };
   }
 );
+
+const getSalesData = async (startDate: Date, endDate: Date) => {
+  const salesData = await Booking.aggregate([
+    {
+      // Stage 1: Filter results
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+      },
+    },
+    // Stage 2: Facet to get total sales and total bookings
+    {
+      $facet: {
+        salesData: [
+          // Stage 1: Group by date and get total sales & bookings
+          {
+            $group: {
+              _id: {
+                date: {
+                  $dateToString: {
+                    format: "%Y-%m-%d",
+                    date: "$createdAt",
+                  },
+                },
+              },
+              totalSales: { $sum: "$amount.total" },
+              numOfBookings: { $sum: 1 },
+            },
+          },
+        ],
+        pendingCashData: [
+          {
+            $match: { "paymentInfo.status": "pending" },
+          },
+          {
+            $group: {
+              _id: null,
+              totalPendingCash: { $sum: "$amount.total" },
+            },
+          },
+        ],
+        paidCashData: [
+          {
+            $match: {
+              "paymentInfo.status": "paid",
+              "paymentInfo.method": "cash",
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalPendingCash: { $sum: "$amount.total" },
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
+  const {
+    salesData: salesDataResult = [],
+    pendingCashData: pendingCashDataResult = [],
+    paidCashData: paidCashDataResult = [],
+  } = salesData[0];
+
+  const salesMap = new Map();
+  let totalSales = 0;
+  let totalBookings = 0;
+
+  salesDataResult.forEach((data: any) => {
+    const date = data?._id?.date;
+    const sales = data?.totalSales || 0;
+    const bookings = data?.numOfBookings || 0;
+
+    salesMap.set(date, { sales, bookings });
+    totalSales += sales;
+    totalBookings += bookings;
+  });
+
+  let currentDate = new Date(startDate);
+  const finalSalesData = [];
+  while (currentDate <= endDate) {
+    const date = currentDate.toISOString().split("T")[0]; // Get date in format YYYY-MM-DD
+    finalSalesData.push({
+      date,
+      sales: salesMap.get(date)?.sales || 0,
+      bookings: salesMap.get(date)?.bookings || 0,
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  const totalPendingAmount = pendingCashDataResult[0]?.totalPendingCash || 0;
+  const totalPaidCash = paidCashDataResult[0]?.totalPendingCash || 0;
+
+  return {
+    salesData: finalSalesData,
+    totalSales,
+    totalBookings,
+    totalPendingAmount,
+    totalPaidCash,
+  };
+};
+
+export const getDashboardStats = catchAsyncErrors(
+  async (startDate: Date, endDate: Date) => {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+
+    startDate.setUTCHours(0, 0, 0, 0);
+    endDate.setUTCHours(23, 59, 59, 999);
+
+    const {
+      salesData,
+      totalSales,
+      totalBookings,
+      totalPendingAmount,
+      totalPaidCash,
+    } = await getSalesData(startDate, endDate);
+
+    return {
+      sales: salesData,
+      totalSales,
+      totalBookings,
+      totalPendingAmount,
+      totalPaidCash,
+    };
+  }
+);

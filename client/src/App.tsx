@@ -8,13 +8,16 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/user/Profile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import Dashboard from "./components/admin/Dashboard";
+import Dashboard from "./components/admin/dashboard/Dashboard";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import ResetPassword from "./components/auth/ResetPassword";
 import PaymentMethod from "./components/payment/PaymentMethod";
 import MyBookings from "./components/booking/MyBookings";
 import Invoice from "./components/invoice/Invoice";
 import Search from "./components/search/Search";
+import ListCars from "./components/admin/car/ListCars";
+import NewCar from "./components/admin/car/NewCar";
+import UpdateCar from "./components/admin/car/UpdateCar";
 
 function App() {
   return (
@@ -71,6 +74,33 @@ function App() {
           element={
             <ProtectedRoute requiredRoles={["admin"]}>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/cars"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <ListCars />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/cars/new"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <NewCar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/cars/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <UpdateCar />
             </ProtectedRoute>
           }
         />

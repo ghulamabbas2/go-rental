@@ -13,6 +13,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   dates?: DateRange | undefined;
   disabledDates?: [string];
   onDateChange?: (date: DateRange | undefined) => void;
+  disabledBefore?: boolean;
 }
 
 export function CarDatePicker({
@@ -20,10 +21,11 @@ export function CarDatePicker({
   dates,
   disabledDates,
   onDateChange,
+  disabledBefore = true,
 }: Props) {
   let [searchParams] = useSearchParams();
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
+  const startDate = searchParams.get("startDate") || dates?.from;
+  const endDate = searchParams.get("endDate") || dates?.to;
 
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: startDate ? new Date(startDate) : undefined,
@@ -39,7 +41,6 @@ export function CarDatePicker({
 
   const parsedDisabledDates =
     disabledDates?.map((timestamp) => new Date(parseInt(timestamp))) || [];
-
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -75,7 +76,10 @@ export function CarDatePicker({
             selected={date}
             onSelect={handleDateChange}
             numberOfMonths={2}
-            disabled={[...parsedDisabledDates, { before: new Date() }]}
+            disabled={[
+              ...parsedDisabledDates,
+              disabledBefore && { before: new Date() },
+            ]}
           />
         </PopoverContent>
       </Popover>

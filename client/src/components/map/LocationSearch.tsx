@@ -15,9 +15,10 @@ import loadGoogleMapsApi from "src/utils/googleMapLoader";
 
 type Props = {
   onLocationChanged: (location: string) => void;
+  prevLocation?: string;
 };
 
-const PlacesAutocomplete = ({ onLocationChanged }: Props) => {
+const PlacesAutocomplete = ({ onLocationChanged, prevLocation }: Props) => {
   const [open, setOpen] = useState(false);
   const [locationValue, setLocationValue] = useState("");
 
@@ -27,6 +28,12 @@ const PlacesAutocomplete = ({ onLocationChanged }: Props) => {
     suggestions: { status, data },
     setValue,
   } = usePlacesAutocomplete({});
+
+  useEffect(() => {
+    if (prevLocation) {
+      setLocationValue(prevLocation);
+    }
+  }, [prevLocation]);
 
   return (
     <div className="w-full">
@@ -83,7 +90,7 @@ const PlacesAutocomplete = ({ onLocationChanged }: Props) => {
   );
 };
 
-const LocationSearch = ({ onLocationChanged }: Props) => {
+const LocationSearch = ({ onLocationChanged, prevLocation }: Props) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -95,7 +102,10 @@ const LocationSearch = ({ onLocationChanged }: Props) => {
   return (
     <div>
       {isLoaded ? (
-        <PlacesAutocomplete onLocationChanged={onLocationChanged} />
+        <PlacesAutocomplete
+          onLocationChanged={onLocationChanged}
+          prevLocation={prevLocation}
+        />
       ) : (
         <div>Loading...</div>
       )}

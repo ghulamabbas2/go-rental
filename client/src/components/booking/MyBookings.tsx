@@ -57,8 +57,6 @@ const MyBookings = () => {
     },
   });
 
-  console.log(data);
-
   const bookings = data?.myBookings?.bookings;
   const pagination = data?.myBookings?.pagination;
 

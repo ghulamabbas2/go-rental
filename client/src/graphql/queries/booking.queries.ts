@@ -63,3 +63,19 @@ export const GET_MY_BOOKINGS = gql`
     }
   }
 `;
+
+export const GET_DASHBOARD_STATS = gql`
+  query GetDashboardStats($startDate: String, $endDate: String) {
+    getDashboardStats(startDate: $startDate, endDate: $endDate) {
+      sales {
+        date
+        sales
+        bookings
+      }
+      totalBookings
+      totalPaidCash
+      totalPendingAmount
+      totalSales
+    }
+  }
+`;

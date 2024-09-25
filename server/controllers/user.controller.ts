@@ -7,7 +7,7 @@ import crypto from "crypto";
 
 import jwt from "jsonwebtoken";
 import {
-  deleteImageToCloudinary,
+  deleteImageFromCloudinary,
   uploadImageToCloudinary,
 } from "../utils/cloudinary";
 import { resetPasswordHTMLTemplate } from "../utils/emailTemplate";
@@ -101,7 +101,7 @@ export const uploadUserAvatar = catchAsyncErrors(
 
     // Remove old avatar from cloudinary
     if (user?.avatar?.public_id) {
-      await deleteImageToCloudinary(user?.avatar?.public_id);
+      await deleteImageFromCloudinary(user?.avatar?.public_id);
     }
 
     await User.findByIdAndUpdate(userId, {

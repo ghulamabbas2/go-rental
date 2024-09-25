@@ -30,7 +30,7 @@ export const uploadMultipleImages = async (
   return Promise.all(uploadPromises);
 };
 
-export const deleteImageToCloudinary = async (publicId: string) => {
+export const deleteImageFromCloudinary = async (publicId: string) => {
   const res = await cloudinary.uploader.destroy(publicId);
 
   return res?.result === "ok";

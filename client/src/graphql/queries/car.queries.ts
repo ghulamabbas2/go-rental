@@ -33,6 +33,7 @@ export const GET_ALL_CARS = gql`
           count
           value
         }
+        createdAt
       }
       pagination {
         resPerPage
@@ -45,8 +46,8 @@ export const GET_ALL_CARS = gql`
 export const GET_CAR_BY_ID = gql`
   query GetCarById(
     $carId: ID!
-    $getCarBookedDatesCarId2: String!
-    $canReviewCarId: ID!
+    $getCarBookedDatesCarId2: String
+    $canReviewCarId: ID
   ) {
     getCarById(carId: $carId) {
       id
