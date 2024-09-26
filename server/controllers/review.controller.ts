@@ -3,6 +3,24 @@ import Booking from "../models/booking.model";
 import Car from "../models/car.model";
 import Review from "../models/review.model";
 import { ReviewInput } from "../types/review.types";
+import APIFilters from "../utils/apiFilters";
+
+export const getAllReviews = catchAsyncErrors(
+  async (page: number, query: string) => {
+    const resPerPage = 3;
+    const apiFilters = new APIFilters(Review)
+      .filters({ car: query })
+      .populate("car");
+
+    let reviews = await apiFilters.model;
+    const totalCount = reviews.length;
+
+    apiFilters.pagination(page, resPerPage);
+    reviews = await apiFilters.model.clone();
+
+    return { reviews, pagination: { totalCount, resPerPage } };
+  }
+);
 
 export const createUpdateReview = catchAsyncErrors(
   async (reviewInput: ReviewInput, userId: string) => {
@@ -42,3 +60,13 @@ export const canReview = catchAsyncErrors(
     return !!booking;
   }
 );
+
+export const deleteReview = catchAsyncErrors(async (reviewId: string) => {
+  const review = await Review.findOneAndDelete({ _id: reviewId });
+
+  if (!review) {
+    throw new Error("Review not found");
+  }
+
+  return true;
+});

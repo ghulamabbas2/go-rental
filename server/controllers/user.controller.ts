@@ -12,6 +12,7 @@ import {
 } from "../utils/cloudinary";
 import { resetPasswordHTMLTemplate } from "../utils/emailTemplate";
 import sendEmail from "../utils/sendEmail";
+import APIFilters from "../utils/apiFilters";
 
 export const registerUser = catchAsyncErrors(async (userInput: UserInput) => {
   const { name, email, password, phoneNo } = userInput;
@@ -175,3 +176,34 @@ export const resetPassword = catchAsyncErrors(
     return true;
   }
 );
+
+export const getAllUsers = catchAsyncErrors(
+  async (page: number, query: string) => {
+    const resPerPage = 3;
+    const apiFilters = new APIFilters(User).search(query);
+
+    let users = await apiFilters.model;
+    const totalCount = users.length;
+
+    apiFilters.pagination(page, resPerPage);
+    users = await apiFilters.model.clone();
+
+    return { users, pagination: { totalCount, resPerPage } };
+  }
+);
+
+export const deleteUser = catchAsyncErrors(async (userId: string) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+  // Remove avatar from cloudinary
+  if (user?.avatar?.public_id) {
+    await deleteImageFromCloudinary(user?.avatar?.public_id);
+  }
+
+  await user.deleteOne();
+
+  return true;
+});

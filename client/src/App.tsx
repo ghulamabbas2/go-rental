@@ -18,6 +18,9 @@ import Search from "./components/search/Search";
 import ListCars from "./components/admin/car/ListCars";
 import NewCar from "./components/admin/car/NewCar";
 import UpdateCar from "./components/admin/car/UpdateCar";
+import ListBookings from "./components/admin/booking/ListBookings";
+import ListUsers from "./components/admin/user/ListUsers";
+import ListReviews from "./components/admin/review/ListReviews";
 
 function App() {
   return (
@@ -101,6 +104,33 @@ function App() {
           element={
             <ProtectedRoute requiredRoles={["admin"]}>
               <UpdateCar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/bookings"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <ListBookings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <ListUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/reviews"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <ListReviews />
             </ProtectedRoute>
           }
         />

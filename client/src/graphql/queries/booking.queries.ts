@@ -1,5 +1,42 @@
 import { gql } from "@apollo/client";
 
+export const GET_ALL_BOOKINGS = gql`
+  query GetAllBookings($page: Int, $query: String) {
+    getAllBookings(page: $page, query: $query) {
+      pagination {
+        resPerPage
+        totalCount
+      }
+      bookings {
+        id
+        user {
+          id
+          name
+        }
+        car {
+          id
+          name
+        }
+        startDate
+        endDate
+        amount {
+          tax
+          discount
+          rent
+          total
+        }
+        daysOfRent
+        rentPerDay
+        paymentInfo {
+          status
+          method
+        }
+        createdAt
+      }
+    }
+  }
+`;
+
 export const GET_BOOKING_BY_ID = gql`
   query GetBookingById($bookingId: String!) {
     getBookingById(bookingId: $bookingId) {

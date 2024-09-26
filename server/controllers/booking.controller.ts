@@ -5,6 +5,23 @@ import { BookingInput } from "../types/booking.types";
 import { NotFoundError } from "../utils/errorHandler";
 import APIFilters from "../utils/apiFilters";
 
+export const getAllBookings = catchAsyncErrors(
+  async (page: number, query: string) => {
+    const resPerPage = 3;
+    const apiFilters = new APIFilters(Booking)
+      .search(query)
+      .populate("car user");
+
+    let bookings = await apiFilters.model;
+    const totalCount = bookings.length;
+
+    apiFilters.pagination(page, resPerPage);
+    bookings = await apiFilters.model.clone();
+
+    return { bookings, pagination: { totalCount, resPerPage } };
+  }
+);
+
 export const createBooking = catchAsyncErrors(
   async (bookingInput: BookingInput, userId: string) => {
     const newBooking = await Booking.create({
@@ -53,6 +70,18 @@ export const updateBooking = catchAsyncErrors(
     return true;
   }
 );
+
+export const deleteBooking = catchAsyncErrors(async (bookingId: string) => {
+  const booking = await Booking.findById(bookingId);
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  await booking?.deleteOne();
+
+  return true;
+});
 
 export const getCarBookedDates = catchAsyncErrors(async (carId: string) => {
   const bookings = await Booking.find({ car: carId });

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 
-import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import {
   Card,
@@ -27,50 +26,43 @@ import {
   errorWrapper,
   parseTimestampDate,
 } from "src/utils/helpers";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_CARS } from "src/graphql/queries/car.queries";
-import {
-  CarFront,
-  Pencil,
-  PlusCircle,
-  Search,
-  Tags,
-  Trash2,
-} from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 import { Input } from "src/components/ui/input";
-import { ICar } from "@go-rental/shared";
+import { IReview } from "@go-rental/shared";
 import CustomPagination from "src/components/layout/CustomPagination";
 import LoadingSpinner from "src/components/layout/LoadingSpinner";
-import { DELETE_CAR_MUTATION } from "src/graphql/mutations/car.mutations";
+import { GET_ALL_REVIEWS } from "src/graphql/queries/review.queries";
+import { DELETE_REVIEW_MUTATION } from "src/graphql/mutations/review.mutations";
 
-const ListCars = () => {
+const ListReviews = () => {
   const navigate = useNavigate();
   let [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const query = searchParams.get("query");
+  const query = searchParams.get("car");
   const page = parseInt(searchParams.get("page") || "1", 10);
 
-  const { error, data, loading, refetch } = useQuery(GET_ALL_CARS, {
+  const { error, data, loading, refetch } = useQuery(GET_ALL_REVIEWS, {
     variables: {
       page,
-      query,
+      ...(query && { query }),
     },
   });
 
-  const cars = data?.getAllCars?.cars;
-  const pagination = data?.getAllCars?.pagination;
+  const reviews = data?.getAllReviews?.reviews;
+  const pagination = data?.getAllReviews?.pagination;
 
-  const [deleteCar, { loading: deleteLoading, error: deleteError }] =
-    useMutation(DELETE_CAR_MUTATION, {
+  const [deleteReview, { loading: deleteLoading, error: deleteError }] =
+    useMutation(DELETE_REVIEW_MUTATION, {
       onCompleted: () => {
         refetch();
       },
     });
 
   useEffect(() => {
-    if (searchQuery === "") searchParams.delete("query");
+    if (searchQuery === "") searchParams.delete("car");
 
     const path = `${window.location.pathname}?${searchParams.toString()}`;
     navigate(path);
@@ -85,13 +77,13 @@ const ListCars = () => {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    navigate(`/admin/cars?query=${searchQuery}`);
+    navigate(`/admin/reviews?car=${searchQuery}`);
   };
 
-  const deleteCarHandler = async (id: string) => {
+  const deleteReviewHandler = async (id: string) => {
     await errorWrapper(async () => {
-      await deleteCar({
-        variables: { carId: id },
+      await deleteReview({
+        variables: { reviewId: id },
       });
     });
   };
@@ -104,24 +96,12 @@ const ListCars = () => {
         <div className="flex min-h-screen w-full flex-col bg-muted/40">
           <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-              <div className="flex items-center">
-                <div className="ml-auto flex items-center gap-2">
-                  <Link to="/admin/cars/new">
-                    <Button size={"sm"} className="h-8 gap-1">
-                      <PlusCircle className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Add New Car
-                      </span>
-                    </Button>
-                  </Link>
-                </div>
-              </div>
               <Card>
                 <CardHeader className="flex flex-col md:flex-row mb-4">
                   <div className="flex-1">
-                    <CardTitle>Cars</CardTitle>
+                    <CardTitle>Reviews</CardTitle>
                     <CardDescription>
-                      View and manage all cars in the system
+                      View and manage all reviews in the system
                     </CardDescription>
                   </div>
                   <form onSubmit={submitHandler}>
@@ -129,7 +109,7 @@ const ListCars = () => {
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
-                        placeholder="Enter Car ID or keyword"
+                        placeholder="Enter Car ID"
                         className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -142,12 +122,12 @@ const ListCars = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead className="hidden w-[100px] sm:table-cell">
-                          Image
+                          ID
                         </TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Category</TableHead>
+                        <TableHead>Comment</TableHead>
+                        <TableHead>Rating</TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Rent Per Day
+                          Car
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
                           Created At
@@ -156,52 +136,30 @@ const ListCars = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {cars?.map((car: ICar) => (
-                        <TableRow key={car?.id}>
+                      {reviews?.map((review: IReview) => (
+                        <TableRow key={review?.id}>
                           <TableCell className="hidden sm:table-cell">
-                            {car?.images[0]?.url ? (
-                              <img
-                                src={car?.images[0]?.url}
-                                alt="Car Thumbnail"
-                                className="aspect-square rounded-md object-cover"
-                                height={"60"}
-                                width={"60"}
-                              />
-                            ) : (
-                              <CarFront color="gray" className="h-8 w-8" />
-                            )}
+                            {review?.id}
                           </TableCell>
                           <TableCell className="font-medium">
-                            {car?.name}
+                            {review?.comment}
                           </TableCell>
                           <TableCell className="font-medium">
-                            <Badge variant="outline">{car?.category}</Badge>
+                            {review?.rating}
                           </TableCell>
-                          <TableCell>${car?.rentPerDay}</TableCell>
+                          <TableCell className="font-medium">
+                            {review?.car?.name}
+                          </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {parseTimestampDate(car?.createdAt)}
+                            {parseTimestampDate(review?.createdAt)}
                           </TableCell>
                           <TableCell>
-                            <Link to={`/admin/cars/${car?.id}`}>
-                              <Button
-                                variant="outline"
-                                className="ms-2"
-                                size="icon"
-                              >
-                                <Pencil className="h-4 w-4" />
-                              </Button>
-                            </Link>
-                            <Link to={`/admin/coupons/${car?.id}`}>
-                              <Button className="ms-2" size="icon">
-                                <Tags className="h-4 w-4" />
-                              </Button>
-                            </Link>
                             <Button
                               variant="destructive"
                               className="ms-2"
                               size="icon"
                               disabled={deleteLoading}
-                              onClick={() => deleteCarHandler(car?.id)}
+                              onClick={() => deleteReviewHandler(review?.id)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -225,7 +183,7 @@ const ListCars = () => {
                         pagination?.resPerPage,
                         pagination?.totalCount
                       )}{" "}
-                      of <strong>{pagination?.totalCount}</strong> cars
+                      of <strong>{pagination?.totalCount}</strong> reviews
                     </div>
                   </CardFooter>
                 )}
@@ -242,4 +200,4 @@ const ListCars = () => {
   );
 };
 
-export default ListCars;
+export default ListReviews;

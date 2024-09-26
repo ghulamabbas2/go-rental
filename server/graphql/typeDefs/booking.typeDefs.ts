@@ -58,6 +58,11 @@ export const bookingTypeDefs = gql`
     sales: [SalesData]
   }
 
+  type PaginatedBookings {
+    bookings: [Booking]
+    pagination: Pagination
+  }
+
   input CustomerInput {
     name: String!
     email: String!
@@ -93,6 +98,7 @@ export const bookingTypeDefs = gql`
   }
 
   type Query {
+    getAllBookings(page: Int, query: String): PaginatedBookings
     getBookingById(bookingId: String!): Booking!
     getCarBookedDates(carId: String): [String]!
     myBookings(page: Int, query: String): CurrentUserBookings
@@ -105,5 +111,6 @@ export const bookingTypeDefs = gql`
       bookingId: String!
       bookingInput: UpdateBookingInput!
     ): Boolean
+    deleteBooking(bookingId: String!): Boolean
   }
 `;

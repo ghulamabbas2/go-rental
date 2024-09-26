@@ -1,5 +1,6 @@
 import { IReview } from "@go-rental/shared";
 import mongoose, { Schema } from "mongoose";
+import Car from "./car.model";
 
 const reviewSchema = new Schema<IReview>(
   {
@@ -24,6 +25,12 @@ const reviewSchema = new Schema<IReview>(
   },
   { timestamps: true }
 );
+
+reviewSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Car.findByIdAndUpdate(doc.car, { $pull: { reviews: doc.id } });
+  }
+});
 
 const Review = mongoose.model<IReview>("Review", reviewSchema);
 export default Review;

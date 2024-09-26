@@ -53,3 +53,15 @@ export const RESET_PASSWORD_MUTATION = gql`
     )
   }
 `;
+
+export const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUser($userId: String!, $userInput: UpdateUserInput!) {
+    updateUser(userId: $userId, userInput: $userInput)
+  }
+`;
+
+export const DELETE_USER_MUTATION = gql`
+  mutation DeleteUser($userId: String!) {
+    deleteUser(userId: $userId)
+  }
+`;

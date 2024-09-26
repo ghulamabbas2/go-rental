@@ -17,6 +17,11 @@ export const userTypeDefs = gql`
     updatedAt: String!
   }
 
+  type PaginatedUsers {
+    users: [User]
+    pagination: Pagination
+  }
+
   input UserInput {
     name: String!
     email: String!
@@ -28,11 +33,13 @@ export const userTypeDefs = gql`
     name: String!
     email: String!
     phoneNo: String!
+    role: [String]
   }
 
   type Query {
     me: User
     logout: Boolean
+    getAllUsers(page: Int, query: String): PaginatedUsers
   }
 
   type Mutation {
@@ -47,5 +54,7 @@ export const userTypeDefs = gql`
       password: String!
       confirmPassword: String!
     ): Boolean
+    updateUser(userId: String!, userInput: UpdateUserInput!): Boolean
+    deleteUser(userId: String!): Boolean
   }
 `;

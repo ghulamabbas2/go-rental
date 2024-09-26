@@ -2,11 +2,17 @@ import { IUser } from "@go-rental/shared";
 import {
   canReview,
   createUpdateReview,
+  deleteReview,
+  getAllReviews,
 } from "../../controllers/review.controller";
 import { ReviewInput } from "../../types/review.types";
 
 export const reviewResolvers = {
   Query: {
+    getAllReviews: async (
+      _: any,
+      { page, query }: { page: number; query: string }
+    ) => getAllReviews(page, query),
     canReview: async (
       _: any,
       { canReviewCarId }: { canReviewCarId: string },
@@ -19,5 +25,7 @@ export const reviewResolvers = {
       { reviewInput }: { reviewInput: ReviewInput },
       { user }: { user: IUser }
     ) => createUpdateReview(reviewInput, user?.id),
+    deleteReview: async (_: any, { reviewId }: { reviewId: string }) =>
+      deleteReview(reviewId),
   },
 };

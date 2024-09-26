@@ -1,6 +1,8 @@
 import { IUser } from "@go-rental/shared";
 import {
   createBooking,
+  deleteBooking,
+  getAllBookings,
   getBookingById,
   getCarBookedDates,
   getDashboardStats,
@@ -11,6 +13,10 @@ import { BookingInput } from "../../types/booking.types";
 
 export const bookingResolvers = {
   Query: {
+    getAllBookings: async (
+      _: any,
+      { page, query }: { page: number; query: string }
+    ) => getAllBookings(page, query),
     getBookingById: async (
       _: any,
       { bookingId }: { bookingId: string },
@@ -46,5 +52,7 @@ export const bookingResolvers = {
       }: { bookingId: string; bookingInput: Partial<BookingInput> },
       { user }: { user: IUser }
     ) => updateBooking(bookingId, bookingInput, user),
+    deleteBooking: async (_: any, { bookingId }: { bookingId: string }) =>
+      deleteBooking(bookingId),
   },
 };

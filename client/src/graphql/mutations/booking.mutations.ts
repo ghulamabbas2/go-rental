@@ -16,3 +16,9 @@ export const UPDATE_BOOKING_MUTATION = gql`
     updateBooking(bookingId: $bookingId, bookingInput: $bookingInput)
   }
 `;
+
+export const DELETE_BOOKING_MUTATION = gql`
+  mutation DeleteBooking($bookingId: String!) {
+    deleteBooking(bookingId: $bookingId)
+  }
+`;
