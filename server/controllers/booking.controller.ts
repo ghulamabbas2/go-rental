@@ -4,6 +4,7 @@ import Booking from "../models/booking.model";
 import { BookingInput } from "../types/booking.types";
 import { NotFoundError } from "../utils/errorHandler";
 import APIFilters from "../utils/apiFilters";
+import { pubsub } from "../apollo/pubsub";
 
 export const getAllBookings = catchAsyncErrors(
   async (page: number, query: string) => {
@@ -27,6 +28,15 @@ export const createBooking = catchAsyncErrors(
     const newBooking = await Booking.create({
       ...bookingInput,
       user: userId,
+    });
+
+    const booking = await newBooking.populate("car");
+
+    pubsub.publish("NEW_BOOKING", {
+      newBookingAlert: {
+        car: booking?.car?.name,
+        amount: booking?.amount?.total,
+      },
     });
 
     return newBooking;

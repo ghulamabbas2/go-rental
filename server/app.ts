@@ -24,14 +24,8 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-const PORT = process.env.PORT || 4000;
 async function startServer() {
   await startApolloServer(app);
-  app.listen(PORT, () => {
-    console.log(
-      `Server is running on port ${PORT} at http://localhost:${PORT}`
-    );
-  });
 }
 
 startServer();

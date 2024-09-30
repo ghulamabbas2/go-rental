@@ -97,6 +97,15 @@ export const bookingTypeDefs = gql`
     paymentInfo: PaymentInfoInput
   }
 
+  type NewBookingAlert {
+    car: String
+    amount: Float
+  }
+
+  type Subscription {
+    newBookingAlert: NewBookingAlert
+  }
+
   type Query {
     getAllBookings(page: Int, query: String): PaginatedBookings
     getBookingById(bookingId: String!): Booking!

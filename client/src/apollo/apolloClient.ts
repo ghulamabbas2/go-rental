@@ -1,5 +1,14 @@
-import { ApolloClient, from, HttpLink, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  from,
+  HttpLink,
+  InMemoryCache,
+  split,
+} from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { createClient } from "graphql-ws";
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -20,8 +29,26 @@ const httpLink = new HttpLink({
   credentials: "include",
 });
 
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: process.env.REACT_APP_GRAPHQL_WS_URI!,
+  })
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink
+);
+
 const client = new ApolloClient({
-  link: from([errorLink, httpLink]),
+  link: from([splitLink, errorLink]),
   cache: new InMemoryCache({}),
 });
 

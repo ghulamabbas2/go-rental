@@ -23,6 +23,9 @@ import { faqTypeDefs } from "../graphql/typeDefs/faq.typeDefs";
 import { faqResolvers } from "../graphql/resolvers/faq.resolvers";
 import { couponTypeDefs } from "../graphql/typeDefs/coupon.typeDefs";
 import { couponResolvers } from "../graphql/resolvers/coupon.resolvers";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 
 interface CustomJwtPayload {
   _id: string;
@@ -55,8 +58,33 @@ export async function startApolloServer(app: Application) {
 
   const schemaWithMiddleware = applyMiddleware(schema, permissions);
 
+  const httpServer = createServer(app);
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/graphql",
+  });
+
+  const serverCleanup = useServer(
+    {
+      schema: schemaWithMiddleware,
+    },
+    wsServer
+  );
+
   const apolloServer = new ApolloServer({
     schema: schemaWithMiddleware,
+    plugins: [
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
   });
 
   await apolloServer.start();
@@ -102,5 +130,12 @@ export async function startApolloServer(app: Application) {
     } else {
       res.status(400).json({ success: false });
     }
+  });
+
+  const PORT = process.env.PORT || 4000;
+  httpServer.listen(PORT, () => {
+    console.log(
+      `Server is running on port ${PORT} at http://localhost:${PORT}`
+    );
   });
 }

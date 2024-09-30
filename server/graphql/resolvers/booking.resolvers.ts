@@ -10,8 +10,16 @@ import {
   updateBooking,
 } from "../../controllers/booking.controller";
 import { BookingInput } from "../../types/booking.types";
+import { pubsub } from "../../apollo/pubsub";
 
 export const bookingResolvers = {
+  Subscription: {
+    newBookingAlert: {
+      subscribe: () => {
+        return pubsub.asyncIterator(["NEW_BOOKING"]);
+      },
+    },
+  },
   Query: {
     getAllBookings: async (
       _: any,

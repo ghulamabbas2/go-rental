@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Header from "./components/layout/Header";
@@ -23,8 +23,25 @@ import ListUsers from "./components/admin/user/ListUsers";
 import ListReviews from "./components/admin/review/ListReviews";
 import ListFaqs from "./components/admin/faq/ListFaqs";
 import ListCoupons from "./components/admin/coupon/ListCoupons";
+import { useReactiveVar, useSubscription } from "@apollo/client";
+import { NEW_BOOKING_SUBSCRIPTION } from "./graphql/subscriptions/booking.subscriptions";
+import { userVar } from "./apollo/apollo-vars";
+import { toast } from "./components/ui/use-toast";
 
 function App() {
+  const { data, error } = useSubscription(NEW_BOOKING_SUBSCRIPTION);
+
+  const user = useReactiveVar(userVar);
+
+  useEffect(() => {
+    if (data && user?.role?.includes("admin")) {
+      toast({
+        title: `New Booking Worth: $${data?.newBookingAlert?.amount}`,
+        description: data?.newBookingAlert?.car,
+      });
+    }
+  }, [data, user]);
+
   return (
     <BrowserRouter>
       <Header />
