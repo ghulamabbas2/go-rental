@@ -92,5 +92,10 @@ export const GET_CAR_BY_ID = gql`
     }
     getCarBookedDates(carId: $getCarBookedDatesCarId2)
     canReview(canReviewCarId: $canReviewCarId)
+    getAllFaqs {
+      id
+      question
+      answer
+    }
   }
 `;

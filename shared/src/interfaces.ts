@@ -116,3 +116,24 @@ export interface IReview {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IFaq {
+  id: string;
+  user: IUser;
+  question: string;
+  answer: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ICoupon {
+  id: string;
+  user: IUser;
+  car: ICar;
+  name: string;
+  code: string;
+  discountPercent: number;
+  expiry: Date;
+  createdAt: string;
+  updatedAt: string;
+}

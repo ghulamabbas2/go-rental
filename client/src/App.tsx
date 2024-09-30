@@ -21,6 +21,8 @@ import UpdateCar from "./components/admin/car/UpdateCar";
 import ListBookings from "./components/admin/booking/ListBookings";
 import ListUsers from "./components/admin/user/ListUsers";
 import ListReviews from "./components/admin/review/ListReviews";
+import ListFaqs from "./components/admin/faq/ListFaqs";
+import ListCoupons from "./components/admin/coupon/ListCoupons";
 
 function App() {
   return (
@@ -131,6 +133,24 @@ function App() {
           element={
             <ProtectedRoute requiredRoles={["admin"]}>
               <ListReviews />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/faqs"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <ListFaqs />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/coupons/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <ListCoupons />
             </ProtectedRoute>
           }
         />

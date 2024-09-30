@@ -6,8 +6,9 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Card, CardHeader, CardTitle } from "../ui/card";
+import { IFaq } from "@go-rental/shared";
 
-export function CarFaqs() {
+export function CarFaqs({ faqs }: { faqs: IFaq[] }) {
   return (
     <Card>
       <CardHeader className="bg-muted/25">
@@ -20,10 +21,15 @@ export function CarFaqs() {
           <div className="text-sm text-muted-foreground">
             <div className="px-8">
               <Accordion type="single" collapsible className="w-full text-xl">
-                <AccordionItem value={`item-1`}>
-                  <AccordionTrigger>Question</AccordionTrigger>
-                  <AccordionContent>Answer</AccordionContent>
-                </AccordionItem>
+                {faqs?.map((faq) => (
+                  <AccordionItem
+                    key={faq?.id?.toString()}
+                    value={`item-${faq?.id}`}
+                  >
+                    <AccordionTrigger>{faq?.question}</AccordionTrigger>
+                    <AccordionContent>{faq?.answer}</AccordionContent>
+                  </AccordionItem>
+                ))}
               </Accordion>
             </div>
           </div>

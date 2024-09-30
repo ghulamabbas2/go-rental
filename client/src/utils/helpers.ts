@@ -51,16 +51,22 @@ export const getUserNameInitials = (fullName: string) => {
   return "";
 };
 
-export const calculateAmount = (rentPerDay: number, daysOfRent: number) => {
+export const calculateAmount = (
+  rentPerDay: number,
+  daysOfRent: number,
+  couponDiscount: number
+) => {
   const rent = rentPerDay * daysOfRent;
   const tax = rent * 0.15;
-  const discount = 0;
-  const total = rent + tax - discount;
+  const discountValue = (rent * couponDiscount) / 100;
+  const discountedAmount = rent - discountValue;
+
+  const total = tax + discountedAmount;
 
   return {
     tax,
     rent,
-    discount,
+    discount: discountedAmount,
     total,
   };
 };

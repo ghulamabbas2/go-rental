@@ -19,6 +19,10 @@ import { paymentResolvers } from "../graphql/resolvers/payment.resolvers";
 import { webhookHandler } from "../controllers/payment.controller";
 import { reviewTypeDefs } from "../graphql/typeDefs/review.typeDefs";
 import { reviewResolvers } from "../graphql/resolvers/review.resolvers";
+import { faqTypeDefs } from "../graphql/typeDefs/faq.typeDefs";
+import { faqResolvers } from "../graphql/resolvers/faq.resolvers";
+import { couponTypeDefs } from "../graphql/typeDefs/coupon.typeDefs";
+import { couponResolvers } from "../graphql/resolvers/coupon.resolvers";
 
 interface CustomJwtPayload {
   _id: string;
@@ -31,6 +35,8 @@ export async function startApolloServer(app: Application) {
     bookingTypeDefs,
     paymentTypeDefs,
     reviewTypeDefs,
+    faqTypeDefs,
+    couponTypeDefs,
   ];
   const resolvers = [
     carResolvers,
@@ -38,6 +44,8 @@ export async function startApolloServer(app: Application) {
     bookingResolvers,
     paymentResolvers,
     reviewResolvers,
+    faqResolvers,
+    couponResolvers,
   ];
 
   const schema = makeExecutableSchema({

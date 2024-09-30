@@ -30,6 +30,7 @@ import {
   getAllDatesBetween,
 } from "src/utils/helpers";
 import { NEW_BOOKING_MUTATION } from "src/graphql/mutations/booking.mutations";
+import CouponCard from "../coupon/CouponCard";
 
 type Props = {
   carId: string;
@@ -44,6 +45,7 @@ export function BookingForm({ carId, rentPerDay = 0, disabledDates }: Props) {
   const [daysOfRent, setDaysOfRent] = useState(0);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [additionalNotes, setAdditionalNotes] = useState("");
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const [customer, setCustomer] = useState({
     name: "",
     email: "",
@@ -75,8 +77,8 @@ export function BookingForm({ carId, rentPerDay = 0, disabledDates }: Props) {
   }, [user]);
 
   useEffect(() => {
-    setAmount(calculateAmount(rentPerDay, daysOfRent));
-  }, [daysOfRent]);
+    setAmount(calculateAmount(rentPerDay, daysOfRent, couponDiscount));
+  }, [daysOfRent, couponDiscount]);
 
   const bookedDates = disabledDates?.map(formatDate);
 
@@ -209,7 +211,9 @@ export function BookingForm({ carId, rentPerDay = 0, disabledDates }: Props) {
         </CardContent>
       </Card>
 
-      {/* <CouponCard /> */}
+      <CouponCard
+        onCouponChange={(discount: number) => setCouponDiscount(discount)}
+      />
 
       <Card className="mt-5">
         <CardHeader>
@@ -233,7 +237,18 @@ export function BookingForm({ carId, rentPerDay = 0, disabledDates }: Props) {
 
               <div className="flex justify-between">
                 <p className="text-md">Total Rent:</p>
-                <p className="font-bold">${amount?.rent?.toFixed(2)}</p>
+                <p className="font-bold">
+                  {couponDiscount > 0 ? (
+                    <>
+                      <span className="line-through me-2">
+                        ${amount?.rent?.toFixed(2)}
+                      </span>
+                      ${(amount?.rent - amount?.discount).toFixed(2)}
+                    </>
+                  ) : (
+                    <>${amount?.rent?.toFixed(2)}</>
+                  )}
+                </p>
               </div>
 
               <div className="flex justify-between">

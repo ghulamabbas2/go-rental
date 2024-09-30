@@ -88,7 +88,7 @@ const CarDetails = () => {
           </Card>
 
           <CarFeatures car={car} />
-          <CarFaqs />
+          <CarFaqs faqs={data?.getAllFaqs} />
 
           <CarReviews
             carId={car?.id}
