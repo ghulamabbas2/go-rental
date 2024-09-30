@@ -93,7 +93,7 @@ export async function startApolloServer(app: Application) {
     "/graphql",
     cors({
       credentials: true,
-      origin: ["http://localhost:3000"],
+      origin: ["http://localhost:3000", process.env.FRONTEND_URL!],
     }),
     json(),
     expressMiddleware(apolloServer, {
