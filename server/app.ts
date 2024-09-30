@@ -5,6 +5,7 @@ dotenv.config({ path: "config/.env.local" });
 import cookieParser from "cookie-parser";
 import { dbConnect } from "./config/dbConnect";
 import { startApolloServer } from "./apollo/apolloServer";
+import path from "path";
 
 const app = express();
 
@@ -20,9 +21,15 @@ app.use(cookieParser());
 
 dbConnect();
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+// Serve Frontend
+if (process.env.NODE_ENV === "production") {
+  // Set build folder as static folder
+  app.use(express.static(path.join(__dirname, "../../client/build")));
+
+  app.get("*", (req: express.Request, res: express.Response) => {
+    res.sendFile(path.join(__dirname, "../../client/build/index.html"));
+  });
+}
 
 async function startServer() {
   await startApolloServer(app);

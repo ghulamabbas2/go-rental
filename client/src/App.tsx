@@ -27,6 +27,7 @@ import { useReactiveVar, useSubscription } from "@apollo/client";
 import { NEW_BOOKING_SUBSCRIPTION } from "./graphql/subscriptions/booking.subscriptions";
 import { userVar } from "./apollo/apollo-vars";
 import { toast } from "./components/ui/use-toast";
+import NotFound from "./components/layout/NotFound";
 
 function App() {
   const { data, error } = useSubscription(NEW_BOOKING_SUBSCRIPTION);
@@ -171,6 +172,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

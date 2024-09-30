@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "NODE_ENV=production node dist/app.js",
     "dev": "nodemon --exec ts-node app.ts",
-    "seeder": "tsc seeder/seeder.ts --outDir .temp && node .temp/seeder/seeder.js && rm -rf .temp"
+    "seeder": "tsc seeder/seeder.ts --outDir .temp && node .temp/seeder/seeder.js && rm -rf .temp",
+    "build:server": "npm install ../shared && npm install && tsc",
+    "build:shared": "cd .. && cd shared && npm install && npm run build",
+    "build:client": "cd .. && cd client && npm install ../shared && npm install && npm run build",
+    "build": "npm run build:shared && npm run build:client && npm run build:server"
   },
   "author": "",
   "license": "ISC",

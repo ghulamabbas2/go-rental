@@ -28,6 +28,7 @@ import {
   isLoadingVar,
 } from "src/apollo/apollo-vars";
 import AdminMobileMenu from "../mobile-menu/AdminMobileMenu";
+import { ModeToggle } from "../theme/ModeToggle";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ const Header = () => {
         ) : (
           loading && <Skeleton className="h-10 w-10 rounded-full" />
         )}
+        <ModeToggle />
       </div>
       <Sheet>
         <SheetTrigger asChild>
@@ -124,7 +126,9 @@ const Header = () => {
           </SheetHeader>
           <div className="grid w-[250px] p-4">
             <div className="flex items-center mb-3">
-              <span className="me-4"></span>
+              <span className="me-4">
+                <ModeToggle />
+              </span>
               {!currentUser && !loading && (
                 <Button asChild>
                   <Link to="/login">Login</Link>
