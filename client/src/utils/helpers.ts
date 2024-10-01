@@ -42,10 +42,10 @@ export const errorWrapper = async (fn: Function) => {
 };
 
 export const getUserNameInitials = (fullName: string) => {
-  const names = fullName.split(" ");
-  if (names.length > 1) {
+  const names = fullName?.split(" ");
+  if (names?.length > 1) {
     return `${names[0].charAt(0)}${names[1].charAt(0)}`;
-  } else if (names.length === 1) {
+  } else if (names?.length === 1) {
     return names[0].charAt(0);
   }
   return "";
@@ -66,7 +66,7 @@ export const calculateAmount = (
   return {
     tax,
     rent,
-    discount: discountedAmount,
+    discount: discountValue,
     total,
   };
 };
